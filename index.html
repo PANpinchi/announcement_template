@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
-    <script src="./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
-    <script src="./node_modules/@ckeditor/ckeditor5-vue2/dist/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/templates.css">
     <title>Post Template</title>
@@ -55,7 +54,7 @@
                         <div style="height: 1rem"></div>
                         <div class="form-group">
                             <label for="classofpost"><strong>內容</strong></label>
-                            <ckeditor :editor="editor" v-model="content"></ckeditor>
+                            <textarea id="editor"></textarea>
                         </div>
                         <div style="height: 1rem"></div>
                         <div class="form-group" style="margin-bottom: 0px;">
@@ -188,10 +187,6 @@
 
 <script>
     /* vue.js */
-    import Vue from 'vue';
-    import CKEditor from '@ckeditor/ckeditor5-vue2';
-    Vue.use( CKEditor );
-
     var app = new Vue({
         el: '#app',
         data: {
@@ -207,8 +202,11 @@
             subtitle_arr: ['副標題-1', '副標題-2', '副標題-3', '副標題-4', '副標題-5'],
             additional: ['PDF檔案', 'URL網址'],
             file: 'pdf',
-
-            editor: ClassicEditor,
+        },
+        mounted(){
+            setInterval(() => {
+                this.content = editor.getData();
+            }, 100)
         },
         methods: {
             show_file: function(num){
@@ -255,5 +253,17 @@
                 location.reload();
             }
         }
-    })
+    });
+
+    /* CKeditor 5 */
+    let editor;
+
+    ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+        .then( newEditor => {
+            editor = newEditor;
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
 </script>
