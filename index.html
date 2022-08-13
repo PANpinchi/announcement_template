@@ -170,11 +170,11 @@
                         </div>
                         <div class="form-group" v-if="file == 'pdf' && additional_pdf != ''">    
                             <h4 style="border-bottom: 2px solid rgb(200, 200, 200);"><strong>附加檔案</strong></h4>
-                            <a id="addition" href="#">{{additional_pdf}}</a> <img src="./img/icon_pdf.gif" width="16" height="16">
+                            <a id="addition" href="#" style="word-break: break-all;">{{additional_pdf}}</a> <img src="./img/icon_pdf.gif" width="16" height="16">
                         </div>
                         <div class="form-group" v-if="file == 'url' && additional_url != ''">
                             <h4 style="border-bottom: 2px solid rgb(200, 200, 200);"><strong>附加網址</strong></h4>
-                            <h6><a :href="additional_url" target="_blank"><strong>{{additional_url}}</strong></a></h6>
+                            <h6><a :href="additional_url" target="_blank" style="word-break: break-all;"><strong>{{additional_url}}</strong></a></h6>
                         </div>
                     </div>
                 </div>
