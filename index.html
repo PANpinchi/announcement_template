@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="../node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+    <script src="../node_modules/@ckeditor/ckeditor5-vue2/dist/ckeditor.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script type="text/javascript" src="jquery.media.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/templates.css">
+    <title>Post Template</title>
+</head>
+<body>
+    <div class="red"></div>
+    <div class="blue"></div>
+    <div id="app">
+        <div class="container">
+            <div style="height: 1rem"></div>
+            <div class="row" style="text-align: center;">
+                <div class="col-5">
+                    <h3>公告系統 Announcement System</h3>
+                    <div style="height: 1rem"></div>
+                    <form id="form" action="#" enctype="multipart/form-data" method="post">
+                        <div class="form-group">
+                            <label for="title"><strong>標題<span style="color: red;"> *</span></strong></label>
+                            <input id="title"
+                                   type="text"
+                                   class="form-control"
+                                   style="border: 2px #999999 solid; font-weight: bold;"
+                                   name="title"
+                                   value=""
+                                   autocomplete="title"
+                                   placeholder="請輸入標題文字"
+                                   maxlength="29"
+                                   required
+                                   v-model="title">
+                        </div>
+                        <div style="height: 1rem"></div>
+                        <div class="form-group">
+                            <label for="classofpost"><strong>副標題<span style="color: red;"> *</span></strong></label>
+                            <select id="classofpost"
+                                    class="form-control ="
+                                    style="border: 2px #999999 solid; font-weight: bold;"
+                                    name="classofpost"
+                                    value="" 
+                                    autocomplete="classofpost"
+                                    required
+                                    v-model="subtitle">
+                                <option value="" selected="true" disabled="disabled">請輸入副標題</option>
+                                <option v-for="item in subtitle_arr" :value="item">{{item}}</option>
+                            </select>
+                        </div>
+                        <div style="height: 1rem"></div>
+                        <div class="form-group">
+                            <label for="classofpost"><strong>內容</strong></label>
+                            <ckeditor :editor="editor" v-model="content"></ckeditor>
+                        </div>
+                        <div style="height: 1rem"></div>
+                        <div class="form-group" style="margin-bottom: 0px;">
+                            <label for="classofsubpost">
+                                <strong>請選擇上傳
+                                    <a id="href_pdf" href="#" v-on:click="show_file(0)">{{additional[0]}}</a>
+                                    或
+                                    <a id="href_address" href="#" v-on:click="show_file(1)">{{additional[1]}}</a>
+                                </strong>
+                            </label>
+    
+                            <div class="input-group mb-3" v-show="file == 'pdf'">
+                                <button class="btn btn-outline-secondary choose_file" type="button">
+                                    <strong><a href="#" v-on:click="choose_file()">選擇檔案</a></strong>
+                                </button>
+                                <input id="pdf_name"
+                                       type="text"
+                                       class="form-control"
+                                       style="border: 2px #999999 solid; font-weight: bold; border-radius: 0px 5px 5px 0px;"
+                                       placeholder="未選擇任何檔案"
+                                       readonly="true"
+                                       aria-label=""
+                                       aria-describedby="basic-addon1"
+                                       v-model="additional_pdf">
+                                <input name="upload_pdf"
+                                       id="upload_pdf"
+                                       type="file"
+                                       accept=".pdf"
+                                       class="form-control"
+                                       style="display: none;"
+                                       v-on:change="display_name()">
+                            </div>
+
+                            <div class="input-group mb-3" v-show="file == 'url'">
+                                <input  name="address"
+                                        id="address"
+                                        type="text"
+                                        class="form-control"
+                                        style="border: 2px #999999 solid; font-weight: bold;"
+                                        value=""
+                                        placeholder="請輸入網址"
+                                        v-model="additional_url">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-5">
+                                <label for="post_start_time"><strong>公告<span style="color: #23a2f6"> 開始 </span>時間<span style="color: red;"> *</span></strong></label>
+                                <input id="post_start_time"
+                                        type="datetime-local"
+                                        class="form-control "
+                                        style="border: 2px #999999 solid; font-weight: bold;"
+                                        name="post_start_time"
+                                        required
+                                        v-model="start_time"
+                                        v-on:change="update_time('start')">
+    
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                            <div class="col-2" style="text-align: center; margin-top: 48px">
+                                <p style="font-size: 18px;"><strong> 至 </strong></p>
+                            </div>
+                            <div class="col-5">
+                                <label for="post_start_time"><strong>公告<span style="color: #c8100d"> 結束 </span>時間<span style="color: red;"> *</span></strong></label>
+                                <input id="post_end_time"
+                                    type="datetime-local"
+                                    class="form-control "
+                                    style="border: 2px #999999 solid; font-weight: bold;"
+                                    name="post_end_time"
+                                    required
+                                    v-model="end_time"
+                                    v-on:change="update_time('end')">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div style="height: 1rem"></div>
+                        <div style="text-align: center;" v-if="title != '' && subtitle != '' && start_time != null && end_time != null">
+                            <button type="button" class="btn btn-primary" style="width: 5rem" v-on:click="reload()">發布</button>
+                        </div>
+                        <div style="text-align: center;" v-else>
+                            <button type="submit" class="btn btn-primary" style="width: 5rem">發布</button>
+                        </div>
+                    </form>
+                    
+                </div>
+                <div class="col-2"></div>
+                <div class="col-5">
+                    <h3>預覽頁面 Preview Page</h3>
+                    <div style="height: 1rem"></div>
+                    <div class="block_style1" v-if="title != '' || subtitle != '' || start_time_content != '[開始時間]' || end_time_content != '[結束時間]' || content != '' || additional_pdf != '' || additional_url != ''">
+                        <div class="form-group" v-if="title != ''">
+                            <h4 style="border-bottom: 2px solid rgb(200, 200, 200);"><strong>標題</strong></h4>
+                            <h5><strong>{{title}}</strong></h5>
+                            <div style="height: 1rem"></div>
+                        </div>
+                        <div class="form-group" v-if="subtitle != ''">
+                            <h4 style="border-bottom: 2px solid rgb(200, 200, 200);"><strong>副標題</strong></h4>
+                            <h5><strong>{{subtitle}}</strong></h5>
+                            <div style="height: 1rem"></div>
+                        </div>
+                        <div class="form-group" v-if="start_time_content != '[開始時間]' || end_time_content != '[結束時間]'">
+                            <h4 style="border-bottom: 2px solid rgb(200, 200, 200);"><strong>公告時間</strong></h4>
+                            <h6><strong>{{start_time_content}} ~ {{end_time_content}}</strong></h6>
+                            <div style="height: 1rem"></div>
+                        </div>
+                        <div class="form-group" v-if="content != ''">
+                            <h4 style="border-bottom: 2px solid rgb(200, 200, 200);"><strong>內容</strong></h4>
+                            <h6 style="word-break: break-all;" v-html="content"></h6>
+                            <div style="height: 1rem"></div>
+                        </div>
+                        <div class="form-group" v-if="file == 'pdf' && additional_pdf != ''">    
+                            <h4 style="border-bottom: 2px solid rgb(200, 200, 200);"><strong>附加檔案</strong></h4>
+                            <a id="addition" href="#">{{additional_pdf}}</a> <img src="./img/icon_pdf.gif" width="16" height="16">
+                        </div>
+                        <div class="form-group" v-if="file == 'url' && additional_url != ''">
+                            <h4 style="border-bottom: 2px solid rgb(200, 200, 200);"><strong>附加網址</strong></h4>
+                            <h6><a :href="additional_url" target="_blank"><strong>{{additional_url}}</strong></a></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 2rem"></div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    /* vue.js */
+    Vue.use( CKEditor );
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            title: '',
+            subtitle: '',
+            content: '',
+            additional_pdf: '',
+            additional_url: '',
+            start_time: null,
+            start_time_content: '[開始時間]',
+            end_time: null,
+            end_time_content: '[結束時間]',
+            subtitle_arr: ['副標題-1', '副標題-2', '副標題-3', '副標題-4', '副標題-5'],
+            additional: ['PDF檔案', 'URL網址'],
+            file: 'pdf',
+
+            editor: ClassicEditor,
+        },
+        methods: {
+            show_file: function(num){
+                if(num == 0){
+                    this.file = 'pdf';
+                    this.additional_url = '';
+                }
+                else{
+                    this.file = 'url';
+                    $('#pdf_name').val(null);
+                    $('#upload_pdf').val(null);
+                    this.additional_pdf = '';
+                }
+            },
+
+            choose_file: function(){
+                $('#upload_pdf').click();
+            },
+
+            display_name: function(){
+                function getFileName(e){
+                    var pos=e.lastIndexOf("\\");
+                    return e.substring(pos+1);  
+                }
+
+                var pdf = $("#upload_pdf").val();
+                var pdfName = getFileName(pdf);
+
+                $('#pdf_name').val(pdfName);
+                this.additional_pdf = pdfName;
+            },
+
+            update_time: function(time){
+                if(time == 'start'){
+                    this.start_time_content = this.start_time.substring(0, this.start_time.lastIndexOf('T'));
+                }
+                else{
+                    this.end_time_content = this.end_time.substring(0, this.end_time.lastIndexOf('T'));
+                }
+            },
+
+            reload: function(time){
+                alert('公告成功 !');
+                location.reload();
+            }
+        }
+    })
+</script>
+
+<script>
+    /* CKeditor 5 */
+    ClassicEditor.create( document.querySelector( '#editor' ), {
+        // 這裡可以設定 plugin
+    })
+	.then( editor => {
+		console.log( 'Editor was initialized', editor );
+	 })
+	 .catch( err => {
+		console.error( err.stack );
+	 });
+</script>
