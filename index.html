@@ -60,15 +60,15 @@
                         <div class="form-group" style="margin-bottom: 0px;">
                             <label for="classofsubpost">
                                 <strong>請選擇上傳
-                                    <a id="href_pdf" href="#" v-on:click="show_file(0)">{{additional[0]}}</a>
+                                    <a id="href_pdf" href="###" v-on:click="show_file(0)">{{additional[0]}}</a>
                                     或
-                                    <a id="href_address" href="#" v-on:click="show_file(1)">{{additional[1]}}</a>
+                                    <a id="href_address" href="###" v-on:click="show_file(1)">{{additional[1]}}</a>
                                 </strong>
                             </label>
     
                             <div class="input-group mb-3" v-show="file == 'pdf'">
                                 <button class="btn btn-outline-secondary choose_file" type="button">
-                                    <strong><a href="#" v-on:click="choose_file()">選擇檔案</a></strong>
+                                    <strong><a href="###" v-on:click="choose_file()">選擇檔案</a></strong>
                                 </button>
                                 <input id="pdf_name"
                                        type="text"
@@ -170,7 +170,7 @@
                         </div>
                         <div class="form-group" v-if="file == 'pdf' && additional_pdf != ''">    
                             <h4 style="border-bottom: 2px solid rgb(200, 200, 200);"><strong>附加檔案</strong></h4>
-                            <a id="addition" href="#" style="word-break: break-all;">{{additional_pdf}}</a> <img src="./img/icon_pdf.gif" width="16" height="16">
+                            <a id="addition" href="###" style="word-break: break-all;">{{additional_pdf}}</a> <img src="./img/icon_pdf.gif" width="16" height="16">
                         </div>
                         <div class="form-group" v-if="file == 'url' && additional_url != ''">
                             <h4 style="border-bottom: 2px solid rgb(200, 200, 200);"><strong>附加網址</strong></h4>
