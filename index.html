@@ -12,7 +12,7 @@
     <title>Announcement Template</title>
 </head>
 <body>
-    <div id="app">
+    <div id="app" v-cloak>
         <div :class="background_red"></div>
         <div :class="background_blue"></div>
 
@@ -377,7 +377,7 @@
             background_red: 'computer_red',
             background_blue: 'computer_blue',
             display_pc: true,
-            display_phone: false,
+            display_phone: false
         },
         mounted(){
             setInterval(() => {
